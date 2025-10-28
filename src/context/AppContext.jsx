@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
 
-const AppContext = createContext()
-
 const initialState = {
   selectedExperiment: 'Bernoulli',
   parameters: {
@@ -9,18 +7,11 @@ const initialState = {
     pipeHeight: 2,
     fluidDensity: 1000,
   },
-  results: {
-    pressureHead: 0,
-    velocityHead: 0,
-    totalHead: 0,
-  },
+  results: {},
   observationData: [],
-  theme: 'light',
+  theme: localStorage.getItem('fluidium_theme') || 'light',
   sidebarOpen: true,
   simulationRunning: false,
-  simulationSpeed: 1,
-  dataExportFormat: 'csv',
-  theme: localStorage.getItem('fluidium_theme') || 'light',
 }
 
 function reducer(state, action) {
@@ -29,7 +20,7 @@ function reducer(state, action) {
       return {
         ...state,
         selectedExperiment: action.payload,
-        parameters: action.payload.defaultParams || {},
+        parameters: {},
         results: {},
         observationData: [],
       }
@@ -83,12 +74,6 @@ function reducer(state, action) {
         simulationRunning: action.payload,
       }
 
-    case 'SET_SIMULATION_SPEED':
-      return {
-        ...state,
-        simulationSpeed: action.payload,
-      }
-
     case 'RESET_EXPERIMENT':
       return {
         ...state,
@@ -101,6 +86,8 @@ function reducer(state, action) {
       return state
   }
 }
+
+export const AppContext = createContext()
 
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
