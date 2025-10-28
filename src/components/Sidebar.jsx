@@ -9,7 +9,7 @@ const experimentCategories = {
     { id: 'Reynolds', label: "Reynold's Experiment", icon: 'fa-chart-line' },
     { id: 'Orifice', label: 'Orifice & Mouthpiece', icon: 'fa-circle-notch' },
     { id: 'Notch', label: 'Notch / Weir Flow', icon: 'fa-arrow-down' },
-    { id: 'Poiseuille', label: 'Hagen–Poiseuille (Capillary)', icon: 'fa-capsules' },
+    { id: 'Poiseuille', label: 'Hagen–Poiseuille', icon: 'fa-capsules' },
     { id: 'Pitot', label: 'Pitot Tube', icon: 'fa-gauge' },
     { id: 'DragLift', label: 'Drag & Lift', icon: 'fa-wind' },
     { id: 'Hydrostatic', label: 'Hydrostatic Pressure', icon: 'fa-compress' },
@@ -21,24 +21,15 @@ function Sidebar() {
   const { selectedExperiment, setExperiment, sidebarOpen, toggleSidebar } = useAppContext()
   const [expandedCategory, setExpandedCategory] = useState('Fluid Mechanics')
 
-  const sidebarVariants = {
-    hidden: { x: -320, opacity: 0 },
-    visible: { x: 0, opacity: 1 },
-    exit: { x: -320, opacity: 0 },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 },
-  }
-
   const handleSelectExperiment = (experimentId) => {
     setExperiment(experimentId)
+    if (window.innerWidth < 1024) {
+      toggleSidebar()
+    }
   }
 
   return (
     <>
-      {/* Mobile Overlay */}
       {sidebarOpen && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -49,15 +40,12 @@ function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
       <motion.aside
-        variants={sidebarVariants}
-        initial="hidden"
-        animate={sidebarOpen ? 'visible' : 'hidden'}
+        initial={{ x: -320 }}
+        animate={{ x: sidebarOpen ? 0 : -320 }}
         transition={{ duration: 0.3 }}
         className="fixed lg:static w-80 bg-gradient-to-br from-white to-indigo-50 h-screen lg:h-[calc(100vh-64px)] border-r border-indigo-200 flex flex-col shadow-2xl lg:shadow-none z-40"
       >
-        {/* Sidebar Header */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -70,7 +58,6 @@ function Sidebar() {
           </h2>
         </motion.div>
 
-        {/* Experiments List */}
         <motion.div
           className="flex-1 overflow-y-auto px-4 py-6 space-y-4"
           initial={{ opacity: 0 }}
@@ -78,12 +65,7 @@ function Sidebar() {
           transition={{ delay: 0.2 }}
         >
           {Object.entries(experimentCategories).map(([category, experiments]) => (
-            <motion.div
-              key={category}
-              variants={itemVariants}
-              initial="hidden"
-              animate="visible"
-            >
+            <motion.div key={category}>
               <button
                 onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
                 className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold transition duration-200"
@@ -119,7 +101,7 @@ function Sidebar() {
                         }`}
                       >
                         <i className={`fas ${experiment.icon} w-4`}></i>
-                        <span>{experiment.label}</span>
+                        <span className="text-sm">{experiment.label}</span>
                       </motion.button>
                     ))}
                   </motion.div>
@@ -129,18 +111,17 @@ function Sidebar() {
           ))}
         </motion.div>
 
-        {/* Sidebar Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
           className="px-4 py-6 border-t border-indigo-200 space-y-3"
         >
-          <button className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200">
+          <button className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 text-sm">
             <i className="fas fa-download mr-2"></i>
             Export Data
           </button>
-          <button className="w-full py-2 px-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition duration-200">
+          <button className="w-full py-2 px-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition duration-200 text-sm">
             <i className="fas fa-cog mr-2"></i>
             Settings
           </button>
