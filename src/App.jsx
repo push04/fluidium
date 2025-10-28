@@ -17,12 +17,10 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true)
 
   useEffect(() => {
-    // Simulate initial loading
     setTimeout(() => {
       setIsLoading(false)
     }, 1500)
 
-    // Check if user has visited before
     const hasVisited = localStorage.getItem('fluidium_visited')
     if (hasVisited) {
       setShowWelcome(false)
@@ -42,12 +40,11 @@ function App() {
     <AppProvider>
       <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen font-sans overflow-x-hidden">
         <Navbar />
-        
+
         <div className="flex min-h-[calc(100vh-64px)]">
           <Sidebar />
-          
+
           <main className="flex-1 p-4 lg:p-6 flex flex-col gap-4 overflow-y-auto">
-            {/* Welcome Modal */}
             <AnimatePresence>
               {showWelcome && (
                 <motion.div
@@ -67,12 +64,14 @@ function App() {
                     <div className="text-center">
                       <motion.div
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                         className="inline-block mb-4"
                       >
                         <i className="fas fa-flask text-6xl text-indigo-600"></i>
                       </motion.div>
-                      <h1 className="text-4xl font-bold gradient-text mb-4">Welcome to Fluidium</h1>
+                      <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 mb-4">
+                        Welcome to Fluidium
+                      </h1>
                       <p className="text-gray-600 text-lg mb-6">
                         Your Interactive Virtual Laboratory for Fluid Mechanics & Engineering Simulations
                       </p>
@@ -96,7 +95,7 @@ function App() {
                       </div>
                       <button
                         onClick={handleWelcomeClose}
-                        className="w-full btn-primary"
+                        className="w-full py-3 px-6 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition"
                       >
                         Start Exploring <i className="fas fa-arrow-right ml-2"></i>
                       </button>
@@ -106,7 +105,6 @@ function App() {
               )}
             </AnimatePresence>
 
-            {/* Main Content Grid */}
             <motion.section
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -138,7 +136,6 @@ function App() {
           </main>
         </div>
 
-        {/* Floating Action Buttons */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -159,7 +156,6 @@ function App() {
           <i className="fas fa-arrow-up text-xl"></i>
         </motion.button>
 
-        {/* Quiz Modal */}
         <AnimatePresence>
           {showQuiz && <QuizModal onClose={() => setShowQuiz(false)} />}
         </AnimatePresence>
