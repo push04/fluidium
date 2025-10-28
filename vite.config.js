@@ -14,6 +14,19 @@ export default defineConfig({
     sourcemap: false,
     minify: 'terser',
     target: 'esnext',
+    terserOptions: {
+      compress: {
+        drop_console: false,
+      },
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'ui-vendor': ['framer-motion', 'recharts'],
+        },
+      },
+    },
   },
   resolve: {
     alias: {
