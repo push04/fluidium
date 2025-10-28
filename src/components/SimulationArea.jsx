@@ -1,42 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAppContext } from '../context/AppContext'
-import BernoulliSim from '../experiments/FluidMechanics/BernoulliSim'
-import VenturiSim from '../experiments/FluidMechanics/VenturiSim'
-import ReynoldSim from '../experiments/FluidMechanics/ReynoldSim'
-import OrificeSim from '../experiments/FluidMechanics/OrificeSim'
-import NotchSim from '../experiments/FluidMechanics/NotchSim'
-import PoiseuilleSim from '../experiments/FluidMechanics/PoiseuilleSim'
-import PitotSim from '../experiments/FluidMechanics/PitotSim'
-import DragLiftSim from '../experiments/FluidMechanics/DragLiftSim'
-import HydrostaticSim from '../experiments/FluidMechanics/HydrostaticSim'
-import HydraulicJumpSim from '../experiments/FluidMechanics/HydraulicJumpSim'
-
-const experimentComponents = {
-  Bernoulli: BernoulliSim,
-  Venturi: VenturiSim,
-  Reynolds: ReynoldSim,
-  Orifice: OrificeSim,
-  Notch: NotchSim,
-  Poiseuille: PoiseuilleSim,
-  Pitot: PitotSim,
-  DragLift: DragLiftSim,
-  Hydrostatic: HydrostaticSim,
-  HydraulicJump: HydraulicJumpSim,
-}
 
 function SimulationArea() {
   const { selectedExperiment, simulationRunning } = useAppContext()
   const canvasRef = useRef(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setIsLoading(true)
     const timer = setTimeout(() => setIsLoading(false), 500)
     return () => clearTimeout(timer)
   }, [selectedExperiment])
-
-  const SimulationComponent = experimentComponents[selectedExperiment]
 
   return (
     <motion.section
@@ -45,7 +20,6 @@ function SimulationArea() {
       transition={{ duration: 0.5 }}
       className="card min-h-[400px] lg:min-h-[500px] flex flex-col relative overflow-hidden"
     >
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -68,7 +42,6 @@ function SimulationArea() {
         )}
       </motion.div>
 
-      {/* Simulation Canvas */}
       {isLoading ? (
         <motion.div
           initial={{ opacity: 0 }}
@@ -99,36 +72,32 @@ function SimulationArea() {
             className="w-full h-full max-w-full"
             style={{ display: 'block' }}
           />
-          {SimulationComponent ? (
-            <SimulationComponent canvasRef={canvasRef} />
-          ) : (
-            <div className="text-center text-indigo-500 font-bold">
-              Select an Experiment to Begin
-            </div>
-          )}
+          <div className="text-center text-indigo-500 font-bold">
+            <i className="fas fa-vial text-4xl mb-2"></i>
+            <p>Simulation visualization ready</p>
+          </div>
         </motion.div>
       )}
 
-      {/* Footer Controls */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="border-t border-gray-200 mt-4 pt-4 flex gap-2 justify-center"
+        className="border-t border-gray-200 mt-4 pt-4 flex gap-2 justify-center flex-wrap"
       >
-        <button className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 flex items-center gap-2">
+        <button className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 flex items-center gap-2 text-sm">
           <i className="fas fa-play"></i>
           Start
         </button>
-        <button className="px-6 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition duration-200 flex items-center gap-2">
+        <button className="px-6 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition duration-200 flex items-center gap-2 text-sm">
           <i className="fas fa-pause"></i>
           Pause
         </button>
-        <button className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200 flex items-center gap-2">
+        <button className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200 flex items-center gap-2 text-sm">
           <i className="fas fa-stop"></i>
           Stop
         </button>
-        <button className="px-6 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition duration-200 flex items-center gap-2">
+        <button className="px-6 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition duration-200 flex items-center gap-2 text-sm">
           <i className="fas fa-redo"></i>
           Reset
         </button>
